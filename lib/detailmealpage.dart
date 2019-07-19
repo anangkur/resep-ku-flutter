@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'model/detailmeal.dart';
 import 'model/resultdetail.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Detailmeal extends StatefulWidget{
 
@@ -19,6 +20,7 @@ class Detailmeal extends StatefulWidget{
 class DetailMealState extends State<Detailmeal>{
 
   final Meals data;
+  DetailMeal detail;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   DetailMealState(this.data);
@@ -30,20 +32,38 @@ class DetailMealState extends State<Detailmeal>{
       appBar: AppBar(title: Text(data.strMeal),),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Hero(
-                tag: data.idMeal,
-                child: Image.network(data.strMealThumb, fit: BoxFit.fitWidth,)
+            Stack(
+              alignment: Alignment(0.8, 1.15),
+              children: <Widget>[
+                Hero(
+                  tag: data.idMeal,
+                  child: Image.network(data.strMealThumb, fit: BoxFit.fitWidth),
+                ),
+                FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed: (){
+                    _launchURL(detail.strYoutube);
+                  },
+                  child: Icon(Icons.videocam, color: Colors.black,),
+                ),
+              ],
             ),
             FutureBuilder(
               future: _fetchDetailData(),
               builder: (context, snapshot){
                 if(snapshot.hasData){
+                  detail = snapshot.data.meals[0];
                   return _detailMeal(snapshot.data);
                 }else if(snapshot.hasError){
                   return Container(child: Text(snapshot.error.toString(),), margin: EdgeInsets.all(20),);
                 }else{
-                  return Container(child: CircularProgressIndicator(), margin: EdgeInsets.all(20),);
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 }
               },
             ),
@@ -76,5 +96,13 @@ class DetailMealState extends State<Detailmeal>{
         ],
       ),
     );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
