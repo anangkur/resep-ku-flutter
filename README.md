@@ -64,7 +64,7 @@
 
 ## Built With
 * [Flutter](https://flutter.dev/)
-* [TheMealDB API](https://db.ygoprodeck.com/)
+* [TheMealDB API](https://www.themealdb.com/)
 
 <!-- CONTRIBUTING -->
 ## Contributing
