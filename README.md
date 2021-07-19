@@ -59,8 +59,8 @@
  </table>
 
 ## Features
-- List of Yu-Gi-Oh Cards.
-- Detail of Selected Card.
+- List of Italian Food Recipes.
+- Detail of Selected Recipe.
 
 ## Built With
 * [Flutter](https://flutter.dev/)
